@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {AppState, Platform, ScrollView, StatusBar, Text, View} from 'react-native';
+import {Alert, AppState, Platform, ScrollView, StatusBar, Text, View} from 'react-native';
 import {Appbar, List, TouchableRipple} from 'react-native-paper';
 import RNPermissions, {
   NotificationsResponse,
@@ -75,7 +75,14 @@ export const App = () => {
           <Appbar.Action
             icon="image-multiple"
             onPress={() => {
-              RNPermissions.openLimitedPhotoLibraryPicker();
+              RNPermissions.openLimitedPhotoLibraryPicker()
+                .then(() => {
+                  const majorVersionIOS = parseInt(Platform.Version.toString(), 10);
+                  if(majorVersionIOS >= 15) {
+                    Alert.alert('Success', 'Selection changed');
+                  }
+                })
+                .catch((error) => console.warn(error));
             }}
           />
         )}
